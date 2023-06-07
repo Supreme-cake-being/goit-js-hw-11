@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./styles/main.css" />
+
+    <title>goit-js-hw-11</title>
+  </head>
+  <body>
+    <header>
+      <form class="search-form" id="search-form">
+        <input
+          type="text"
+          name="searchQuery"
+          autocomplete="off"
+          placeholder="Search images..."
+        />
+        <button type="submit">
+          <svg width="16" height="16">
+            <use href="./images/symbol-defs.svg#search"></use>
+          </svg>
+        </button>
+      </form>
+    </header>
+
+    <main>
+      <section>
+        <div class="container">
+          <div class="gallery">
+            <!-- Картки зображень -->
+          </div>
+
+          <button type="button" class="load-more">Load more</button>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
