@@ -2,9 +2,13 @@ import axios from 'axios';
 const API_KEY = `37049181-477cd3b08f8c43486a46fa1dd`;
 
 export default class PixabayApi {
+    page;
+    hits;
+
     constructor() {
         this.query = '';
         this.page = 1;
+        this.hits = 0;
     }
 
     get searchQuery() {
@@ -27,10 +31,9 @@ export default class PixabayApi {
                 page: `${this.page}`
             }
         });
-        if (this.page === 13)
-            throw new Error();
             
         this.incrementPage();
+        this.incrementHits();
         return response;
     }
 
@@ -40,5 +43,13 @@ export default class PixabayApi {
 
     resetPage() {
         this.page = 1;
+    }
+
+    incrementHits() {
+        this.hits += 40;
+    }
+
+    resetHits() {
+        this.hits = 0;
     }
 }

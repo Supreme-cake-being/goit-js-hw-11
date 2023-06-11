@@ -1,16 +1,12 @@
 import PixabayApi from './js/pixabay-api.js';
 import { markupCreator } from './js/markup-creator.js';
 import { Notify } from 'notiflix';
-import { prevStuffDestroyer } from './js/previous-stuff-destroyer.js';
 
 Notify.init({  
   failure: {
     notiflixIconColor: 'white',
   }
 });
-
-// const form = document.querySelector('form');
-// const gallery = document.querySelector('gallery');
 
 const refs = {
   form: document.querySelector('form'),
@@ -26,21 +22,21 @@ loadMoreBtn.style.display = 'none';
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   
-  const prevPhotoCards = document.querySelectorAll('.photo-card');
-  prevStuffDestroyer(prevPhotoCards);
+  gallery.innerHTML = '';
   loadMoreBtn.style.display = 'none';
 
-
-  if (!form.searchQuery.value)
-      return;
+  if (!form.searchQuery.value || !form.searchQuery.value.trim()) {
+    form.reset();
+    return;
+  }
 
   api.searchQuery = form.searchQuery.value;
   api.resetPage();
+  api.resetHits();
   try {
     const pics = await api.getPics();
-    if (!pics.data.hits.length) {
+    if (!pics.data.hits.length)
       throw new Error();
-    }
     
     const markup = await markupCreator(pics.data.hits);
     gallery.insertAdjacentHTML('beforeend', markup);
@@ -55,7 +51,12 @@ loadMoreBtn.addEventListener('click', async () => {
     const pics = await api.getPics()
     const markup = await markupCreator(pics.data.hits);
     gallery.insertAdjacentHTML('beforeend', markup);
+    
+    console.log(api.hits);
+    if (api.hits >= 500)
+      throw new Error();
   } catch (error) {
+    loadMoreBtn.style.display = 'none';
     Notify.failure("We're sorry, but you've reached the end of search results.")
   }
 });
