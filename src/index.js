@@ -25,14 +25,13 @@ form.addEventListener('submit', async (e) => {
   gallery.innerHTML = '';
   loadMoreBtn.style.display = 'none';
 
-  if (!form.searchQuery.value || !form.searchQuery.value.trim()) {
+  api.searchQuery = form.searchQuery.value.trim();
+  if (!api.searchQuery) {
     form.reset();
     return;
   }
 
-  api.searchQuery = form.searchQuery.value;
   api.resetPage();
-  api.resetHits();
   try {
     const pics = await api.getPics();
     if (!pics.data.hits.length)
@@ -49,12 +48,14 @@ form.addEventListener('submit', async (e) => {
 loadMoreBtn.addEventListener('click', async () => {
   try {
     const pics = await api.getPics()
+    
     const markup = await markupCreator(pics.data.hits);
     gallery.insertAdjacentHTML('beforeend', markup);
     
-    console.log(api.hits);
-    if (api.hits >= 500)
+    if (api.page > (pics.data.totalHits / 40) + 1) {
       throw new Error();
+    }
+
   } catch (error) {
     loadMoreBtn.style.display = 'none';
     Notify.failure("We're sorry, but you've reached the end of search results.")
