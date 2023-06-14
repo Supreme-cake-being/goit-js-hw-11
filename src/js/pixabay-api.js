@@ -38,6 +38,6 @@ export default class PixabayApi {
     }
 
     resetPage() {
-        this.page = 0;
+        this.page = 1;
     }
 }
